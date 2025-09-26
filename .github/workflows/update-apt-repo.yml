@@ -3,7 +3,7 @@ name: Update APT Repository
 on:
   schedule:
     # Run daily at 6 AM UTC
-    - cron: '0 6 * * *'
+    - cron: "0 6 * * *"
   workflow_dispatch:
     # Allow manual triggering
 
@@ -16,53 +16,86 @@ jobs:
       id-token: write
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Setup GPG for package signing
-      run: |
-        # Import GPG private key for signing packages
-        echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
-        echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --sign-key ${{ secrets.GPG_KEY_ID }}
+      - name: Setup GPG for package signing
+        run: |
+          # Import GPG private key for signing packages
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --sign-key ${{ secrets.GPG_KEY_ID }}
 
-    - name: Install required tools
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y dpkg-dev apt-utils gnupg2 curl jq
+      - name: Install required tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev apt-utils gnupg2 curl jq
 
-    - name: Create apt repository structure
-      run: |
-        mkdir -p apt-repo/{dists/stable/main/binary-amd64,pool/main}
-        mkdir -p apt-repo/dists/stable/main/source
+      - name: Create apt repository structure
+        run: |
+          mkdir -p apt-repo/{dists/stable/main/binary-amd64,pool/main}
+          mkdir -p apt-repo/dists/stable/main/source
 
-    - name: Fetch latest DragonflyDB releases
-      id: fetch-releases
-      run: |
-        # Get all releases from GitHub API
-        releases_json=$(curl -s "https://api.github.com/repos/dragonflydb/dragonfly/releases")
+      - name: Fetch latest DragonflyDB releases
+        id: fetch-releases
+        run: |
+          # Get all releases from GitHub API (non-draft, non-prerelease)
+          releases_json=$(curl -s "https://api.github.com/repos/dragonflydb/dragonfly/releases")
 
-        # Create downloads directory
-        mkdir -p downloads
+          # Create downloads directory
+          mkdir -p downloads
+          mkdir -p apt-repo/pool/main
 
-        # Track downloaded packages
-        downloaded_packages=""
+          # Track downloaded packages
+          downloaded_packages=""
 
-        # Process each release
-        echo "$releases_json" | jq -r '.[] | select(.draft == false and .prerelease == false) | .assets[] | select(.name | test(".*amd64.*\\.deb$")) | "\(.browser_download_url) \(.name)"' | while read -r url filename; do
-          if [ ! -f "apt-repo/pool/main/$filename" ]; then
-            echo "Downloading $filename..."
-            curl -L -o "downloads/$filename" "$url"
-            mv "downloads/$filename" "apt-repo/pool/main/$filename"
-            downloaded_packages="$downloaded_packages $filename"
-          else
-            echo "Package $filename already exists, skipping..."
-          fi
-        done
+          # For each release asset that matches an amd64 deb, download it and rename
+          # using the release tag (strip leading 'v' if present) to avoid filename collisions.
+          #
+          # We output lines: <tag> <url> <orig_name>
+          echo "$releases_json" | jq -r '
+            .[]
+            | select(.draft == false and .prerelease == false)
+            | .tag_name as $tag
+            | .assets[]
+            | select(.name | test(".*amd64.*\\.deb$"))
+            | "\($tag) \(.browser_download_url) \(.name)"
+          ' | while read -r tag url orig_name; do
+            # Normalize tag to a version string (remove leading "v" if present)
+            version=$(echo "$tag" | sed "s/^v//")
+            # Generate a new unique filename by inserting the version.
+            # If origin name already includes the version, this preserves it.
+            # Common source name is dragonfly_amd64.deb -> produce dragonfly_<version>_amd64.deb
+            new_name=$(echo "$orig_name" | sed -E "s/^(dragonfly)(_.*)?(_amd64\\.deb)$/\\1_${version}_amd64.deb/; t; s/\\.deb$/_${version}.deb/")
 
-        # Save downloaded packages list for next step
-        echo "downloaded_packages=$downloaded_packages" >> $GITHUB_OUTPUT
+            # Fallback: if sed didn't transform (unexpected name), append version before .deb
+            if [ "$new_name" = "$orig_name" ]; then
+              new_name="${orig_name%.deb}_${version}.deb"
+            fi
+
+            dest_path="apt-repo/pool/main/$new_name"
+
+            if [ ! -f "$dest_path" ]; then
+              echo "Downloading $orig_name (release: $tag) -> $new_name"
+              # Download to a temporary filename to avoid collisions
+              tmpfile="downloads/${version}_tmp.deb"
+              curl -L -f -o "$tmpfile" "$url"
+              # Simple sanity check: file exists and non-empty
+              if [ -s "$tmpfile" ]; then
+                mv "$tmpfile" "$dest_path"
+                downloaded_packages="$downloaded_packages $new_name"
+              else
+                echo "Download failed or empty for $url"
+                rm -f "$tmpfile"
+              fi
+            else
+              echo "Package $new_name already exists, skipping..."
+            fi
+          done
+
+          # Save downloaded packages list for next step
+          echo "downloaded_packages=$downloaded_packages" >> $GITHUB_OUTPUT
 
     - name: Generate Packages file
       run: |

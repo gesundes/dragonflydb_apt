@@ -44,6 +44,8 @@ The script creates two files:
 - `dragonflydb-apt-private.key` - **Keep this secure!**
 - `dragonflydb-apt-public.key` - Can be shared publicly
 
+**🛡️ Security Note**: Private key files are automatically protected by `.gitignore` and will never be accidentally committed to your git repository.
+
 ## Step 3: Add GitHub Secrets
 
 ### Method A: Using GitHub Web Interface (Recommended)
@@ -209,11 +211,12 @@ gh secret list
 
 ## Security Notes
 
-- **Never commit private keys to git**
+- **Never commit private keys to git** (protected by .gitignore)
 - **Use strong passphrases**
 - **Regularly rotate GPG keys** (every 1-2 years)
 - **Monitor repository access logs**
 - **Keep GitHub secrets minimal** (only what's needed)
+- **Private key files are automatically excluded** from git commits via .gitignore
 
 ## Next Steps
 

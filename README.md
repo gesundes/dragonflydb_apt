@@ -200,6 +200,7 @@ jq -r '.[] | select(.draft == false and .prerelease == false) | .assets[] | sele
 ## Security Considerations
 
 - Private GPG key is stored securely in GitHub Secrets
+- Private key files are protected by .gitignore and never committed to git
 - Repository metadata is cryptographically signed
 - Users can verify package integrity using the public key
 - Regular updates ensure latest security patches
