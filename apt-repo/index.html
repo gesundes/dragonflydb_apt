@@ -18,12 +18,16 @@
     <h2>Quick Setup</h2>
     <p>Add this repository to your system:</p>
     <div class="code">
-# Add GPG key<br>
-curl -fsSL https://gesundes.github.io/dragonflydb_apt/pubkey.gpg | sudo gpg --dearmor -o /usr/share/keyrings/dragonflydb.gpg<br><br>
+# Add GPG key (install into apt keyrings)<br>
+sudo install -d -m 0755 /etc/apt/keyrings<br>
+curl -fsSL https://gesundes.github.io/dragonflydb_apt/pubkey.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dragonflydb.gpg<br>
+sudo chmod 0644 /etc/apt/keyrings/dragonflydb.gpg<br><br>
 
-# Add repository<br>
-echo "deb [signed-by=/usr/share/keyrings/dragonflydb.gpg] https://gesundes.github.io/dragonflydb_apt stable main" | sudo tee /etc/apt/sources.list.d/dragonflydb.list<br><br>
+# Add repository (use signed-by via keyring)<br>
+echo "deb [signed-by=/etc/apt/keyrings/dragonflydb.gpg] https://gesundes.github.io/dragonflydb_apt stable main" | sudo tee /etc/apt/sources.list.d/dragonflydb.list >/dev/null<br><br>
 
+# Recommend enabling By-Hash for stronger metadata integrity<br>
+echo 'Acquire::By-Hash "true";' | sudo tee /etc/apt/apt.conf.d/99-by-hash >/dev/null<br><br>
 # Update package list<br>
 sudo apt update<br><br>
 
