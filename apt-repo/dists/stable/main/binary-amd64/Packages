@@ -1,0 +1,16 @@
+Package: dragonfly
+Version: 1.34.1
+Architecture: amd64
+Maintainer: DragonflyDB authors  <dragonfly@dragonflydb.io>
+Installed-Size: 34514
+Depends: libc6, openssl, adduser, zstd
+Filename: pool/main/dragonfly_1.34.1_amd64.deb
+Size: 12822656
+MD5sum: 022b2f708f2b87eb69262db6e906ed5c
+SHA1: 2b6bbf8188cdcbd66b976dd1aba3669fef10d69a
+SHA256: 681f7542acb54b5cc97aa1da0d29207132a8ca47638531dc46cacd6d1704441d
+Section: database
+Priority: optional
+Homepage: https://dragonflydb.io
+Description: A fast in-memory store that is fully compatible with Redis™* and Memcached.
+

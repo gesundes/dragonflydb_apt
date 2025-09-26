@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Origin: DragonflyDB APT Repository
+Label: dragonflydb
+Suite: stable
+Codename: stable
+Version: 1.0
+Architectures: amd64
+Components: main
+Description: DragonflyDB APT Repository - Unofficial mirror
+Date: Fri, 26 Sep 2025 12:40:10 +0000
+MD5Sum:
+259d89480ab33c0ac5f0a4704faa5d14   binary-amd64/Packages
+515d63c8e7973c9f7527703437d0c44a   binary-amd64/Packages.gz
+SHA1:
+b1ddb45d3b6f7d306cad74c191daad167b1ca6c9   binary-amd64/Packages
+862b1ce37fd8e05df390c347905a12626da352f0   binary-amd64/Packages.gz
+SHA256:
+ce1e6d0fa18c1b440579668795c612e57842ded4bf82dcad9ebe7b8fec629c72   binary-amd64/Packages
+5761a0f27403c4045d02dceb1bc9f5977623006bb2b9e5d6d3a985ce4bc597bc   binary-amd64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEkevwvzKy+OLMX2XZKtCRK14JOS4FAmjWiawACgkQKtCRK14J
+OS517BAApmkJjKvwSNClA7O1TRyCCzlsOKc3xQVGK3ABsNe5Ng5fKAsID/EB1nOx
+RuaxEtsxWcue5Sv4jELb3sXqgcc4oiiJdnsIjuDYnMfq+ialGljh1nKsQeUKJaJj
+uXrRJ3m5ogSO92X2D1SxvMoKJyL8CDDE4P+H6XZytV6qgxH4LOW5frzJoMj87mvM
+5SpncxI+ABguwLU8lsw/dZ9xWu0exWazR+Evi/ZHCRonnvp9HnvJF53VYXduY+fz
+5BZOoXUBTGhaGMW+hp1+2BA1p38uTjOmLfwYkem/VQDlwuMD9ce00SFvi8ja7oiT
+6ESShe1/9bYY6FE3HBy0+BLkHFezZDGGA6LrS+l91ls403gURSYiVD+I57zsbz5x
+Yn8E/WgFlezAYUq8145aCsyDgvdzRQui0h3ipCiXq5ood+Ne6rS1NLKWD6dZI5OP
+kjbZRymhDpTAHnmpLYk/Puo1ocns2/9TAm+yP0kx/YWJoXYSfBhvr8K0ds1Wb/i+
+/eFmTSUYfJ4pNMPnT35PhIwsKa/BhRbRFj9DmtOGBftiNB3tcAsIB5Veh7pOXfCX
+KFC4+RPqSNwOUnz5XHGD6qHmNPrFqEBdE2W6gD4ZEh/q61XUPNuZXLM6a8ZX7bsE
+EnVdy9LgkExRqtpaFri0gykvigav4t4iuwfhXj2Du+gKPnwzBfo=
+=R8oo
+-----END PGP SIGNATURE-----
