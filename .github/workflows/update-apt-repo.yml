@@ -194,7 +194,7 @@ jobs:
           EOF
 
           # List all deb packages
-          find apt-repo/pool/main -name "*.deb" -printf '<li><a href="pool/main/%f">%f</a></li>\n' >> apt-repo/index.html
+          find apt-repo/pool/main -name "*.deb" -printf '%f\n' | sort -t _ -k2,2V -r | awk -v p='pool/main/' '{printf "<li><a href=\"%s%s\">%s</a></li>\n",p,$0,$0}' >> apt-repo/index.html
 
           cat >> apt-repo/index.html << 'EOF'
               </ul>
@@ -208,11 +208,14 @@ jobs:
                   <li><strong>GPG Key:</strong> <a href="pubkey.gpg">Download</a></li>
               </ul>
 
-              <p><small>Last updated: $(date)</small></p>
+              <p><small>Last updated: __LAST_UPDATED__</small></p>
               <p><small>Source: <a href="https://github.com/${{ github.repository }}">GitHub Repository</a></small></p>
           </body>
           </html>
           EOF
+
+          # Inject current date string into the page
+          sed -i "s|__LAST_UPDATED__|$(date -Ru)|" apt-repo/index.html
 
       - name: Check for changes
         id: check-changes
