@@ -22,10 +22,10 @@ This is an **unofficial** repository that mirrors packages from the official Dra
 
 ```bash
 # Add GPG key
-curl -fsSL https://YOUR-USERNAME.github.io/YOUR-REPO-NAME/pubkey.gpg | sudo gpg --dearmor -o /usr/share/keyrings/dragonflydb.gpg
+curl -fsSL https://gesundes.github.io/dragonflydb_apt/pubkey.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dragonflydb.gpg
 
 # Add repository
-echo "deb [signed-by=/usr/share/keyrings/dragonflydb.gpg] https://YOUR-USERNAME.github.io/YOUR-REPO-NAME stable main" | sudo tee /etc/apt/sources.list.d/dragonflydb.list
+echo "deb [signed-by=/etc/apt/keyrings/dragonflydb.gpg] https://gesundes.github.io/dragonflydb_apt stable main" | sudo tee /etc/apt/sources.list.d/dragonflydb.list >/dev/null
 
 # Update package list
 sudo apt update
@@ -33,8 +33,6 @@ sudo apt update
 # Install DragonflyDB
 sudo apt install dragonfly
 ```
-
-Replace `YOUR-USERNAME` and `YOUR-REPO-NAME` with your actual GitHub username and repository name.
 
 ### Installing DragonflyDB
 
@@ -212,9 +210,3 @@ This repository configuration is provided as-is for educational and convenience 
 ## Disclaimer
 
 This is an unofficial mirror. Always verify packages against official sources for production use. The maintainers of this repository are not affiliated with the DragonflyDB project.
-
----
-
-**Repository URL**: https://YOUR-USERNAME.github.io/YOUR-REPO-NAME
-
-**Last Updated**: Auto-updated daily via GitHub Actions
