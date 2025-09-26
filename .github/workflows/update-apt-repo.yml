@@ -101,38 +101,32 @@ jobs:
         run: |
           cd apt-repo
 
-          # Generate Packages file
-          dpkg-scanpackages pool/main /dev/null > dists/stable/main/binary-amd64/Packages
+          # Generate Packages file with apt-ftparchive (ensures proper fields)
+          apt-ftparchive packages pool/main > dists/stable/main/binary-amd64/Packages
 
           # Compress Packages file
-          gzip -k dists/stable/main/binary-amd64/Packages
+          gzip -9fk dists/stable/main/binary-amd64/Packages
 
       - name: Generate Release file
         run: |
-          cd apt-repo/dists/stable
+          # Use apt-ftparchive to generate Release with proper checksums and sizes
+          cd apt-repo
 
-          # Create Release file
-          cat > Release << EOF
-          Origin: DragonflyDB APT Repository
-          Label: dragonflydb
-          Suite: stable
-          Codename: stable
-          Version: 1.0
-          Architectures: amd64
-          Components: main
-          Description: DragonflyDB APT Repository - Unofficial mirror
-          Date: $(date -Ru)
-          EOF
+          # Ensure Packages and Packages.gz exist (idempotent)
+          apt-ftparchive packages pool/main > dists/stable/main/binary-amd64/Packages
+          gzip -9fk dists/stable/main/binary-amd64/Packages
 
-          # Generate checksums
-          echo "MD5Sum:" >> Release
-          find main -type f -exec md5sum {} \; | sed 's|main/| |' >> Release
-
-          echo "SHA1:" >> Release
-          find main -type f -exec sha1sum {} \; | sed 's|main/| |' >> Release
-
-          echo "SHA256:" >> Release
-          find main -type f -exec sha256sum {} \; | sed 's|main/| |' >> Release
+          apt-ftparchive \
+            -o APT::FTPArchive::Release::Origin="DragonflyDB APT Repository" \
+            -o APT::FTPArchive::Release::Label="dragonflydb" \
+            -o APT::FTPArchive::Release::Suite="stable" \
+            -o APT::FTPArchive::Release::Codename="stable" \
+            -o APT::FTPArchive::Release::Architectures="amd64" \
+            -o APT::FTPArchive::Release::Components="main" \
+            -o APT::FTPArchive::Release::Description="DragonflyDB APT Repository - Unofficial mirror" \
+            -o APT::FTPArchive::Release::Acquire-By-Hash="yes" \
+            -o APT::FTPArchive::Release::Valid-Until="$(date -Ru -d '+30 days')" \
+            release dists/stable > dists/stable/Release
 
       - name: Sign Release file
         run: |
@@ -140,11 +134,13 @@ jobs:
 
           # Sign Release file
           gpg --batch --yes --pinentry-mode loopback --passphrase "${{ secrets.GPG_PASSPHRASE }}" \
+              --digest-algo SHA512 \
               --default-key ${{ secrets.GPG_KEY_ID }} \
               --armor --detach-sign --output Release.gpg Release
 
           # Create InRelease file (clearsigned)
           gpg --batch --yes --pinentry-mode loopback --passphrase "${{ secrets.GPG_PASSPHRASE }}" \
+              --digest-algo SHA512 \
               --default-key ${{ secrets.GPG_KEY_ID }} \
               --armor --clearsign --output InRelease Release
 
@@ -176,12 +172,16 @@ jobs:
               <h2>Quick Setup</h2>
               <p>Add this repository to your system:</p>
               <div class="code">
-          # Add GPG key<br>
-          curl -fsSL https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pubkey.gpg | sudo gpg --dearmor -o /usr/share/keyrings/dragonflydb.gpg<br><br>
+          # Add GPG key (install into apt keyrings)<br>
+          sudo install -d -m 0755 /etc/apt/keyrings<br>
+          curl -fsSL https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pubkey.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dragonflydb.gpg<br>
+          sudo chmod 0644 /etc/apt/keyrings/dragonflydb.gpg<br><br>
 
-          # Add repository<br>
-          echo "deb [signed-by=/usr/share/keyrings/dragonflydb.gpg] https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }} stable main" | sudo tee /etc/apt/sources.list.d/dragonflydb.list<br><br>
+          # Add repository (use signed-by via keyring)<br>
+          echo "deb [signed-by=/etc/apt/keyrings/dragonflydb.gpg] https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }} stable main" | sudo tee /etc/apt/sources.list.d/dragonflydb.list >/dev/null<br><br>
 
+          # Recommend enabling By-Hash for stronger metadata integrity<br>
+          echo 'Acquire::By-Hash "true";' | sudo tee /etc/apt/apt.conf.d/99-by-hash >/dev/null<br><br>
           # Update package list<br>
           sudo apt update<br><br>
 
@@ -194,7 +194,7 @@ jobs:
           EOF
 
           # List all deb packages
-          find apt-repo/pool/main -name "*.deb" -printf '<li><a href="pool/main/%f">%f</a></li>\n' >> apt-repo/index.html
+          find apt-repo/pool/main -name "*.deb" -printf '%f\n' | sort -t _ -k2,2V -r | awk -v p='pool/main/' '{printf "<li><a href=\"%s%s\">%s</a></li>\n",p,$0,$0}' >> apt-repo/index.html
 
           cat >> apt-repo/index.html << 'EOF'
               </ul>
@@ -208,11 +208,14 @@ jobs:
                   <li><strong>GPG Key:</strong> <a href="pubkey.gpg">Download</a></li>
               </ul>
 
-              <p><small>Last updated: $(date)</small></p>
+              <p><small>Last updated: __LAST_UPDATED__</small></p>
               <p><small>Source: <a href="https://github.com/${{ github.repository }}">GitHub Repository</a></small></p>
           </body>
           </html>
           EOF
+
+          # Inject current date string into the page
+          sed -i "s|__LAST_UPDATED__|$(date -Ru)|" apt-repo/index.html
 
       - name: Check for changes
         id: check-changes
