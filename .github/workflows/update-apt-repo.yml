@@ -97,171 +97,171 @@ jobs:
           # Save downloaded packages list for next step
           echo "downloaded_packages=$downloaded_packages" >> $GITHUB_OUTPUT
 
-    - name: Generate Packages file
-      run: |
-        cd apt-repo
+      - name: Generate Packages file
+        run: |
+          cd apt-repo
 
-        # Generate Packages file
-        dpkg-scanpackages pool/main /dev/null > dists/stable/main/binary-amd64/Packages
+          # Generate Packages file
+          dpkg-scanpackages pool/main /dev/null > dists/stable/main/binary-amd64/Packages
 
-        # Compress Packages file
-        gzip -k dists/stable/main/binary-amd64/Packages
+          # Compress Packages file
+          gzip -k dists/stable/main/binary-amd64/Packages
 
-    - name: Generate Release file
-      run: |
-        cd apt-repo/dists/stable
+      - name: Generate Release file
+        run: |
+          cd apt-repo/dists/stable
 
-        # Create Release file
-        cat > Release << EOF
-        Origin: DragonflyDB APT Repository
-        Label: dragonflydb
-        Suite: stable
-        Codename: stable
-        Version: 1.0
-        Architectures: amd64
-        Components: main
-        Description: DragonflyDB APT Repository - Unofficial mirror
-        Date: $(date -Ru)
-        EOF
+          # Create Release file
+          cat > Release << EOF
+          Origin: DragonflyDB APT Repository
+          Label: dragonflydb
+          Suite: stable
+          Codename: stable
+          Version: 1.0
+          Architectures: amd64
+          Components: main
+          Description: DragonflyDB APT Repository - Unofficial mirror
+          Date: $(date -Ru)
+          EOF
 
-        # Generate checksums
-        echo "MD5Sum:" >> Release
-        find main -type f -exec md5sum {} \; | sed 's|main/| |' >> Release
+          # Generate checksums
+          echo "MD5Sum:" >> Release
+          find main -type f -exec md5sum {} \; | sed 's|main/| |' >> Release
 
-        echo "SHA1:" >> Release
-        find main -type f -exec sha1sum {} \; | sed 's|main/| |' >> Release
+          echo "SHA1:" >> Release
+          find main -type f -exec sha1sum {} \; | sed 's|main/| |' >> Release
 
-        echo "SHA256:" >> Release
-        find main -type f -exec sha256sum {} \; | sed 's|main/| |' >> Release
+          echo "SHA256:" >> Release
+          find main -type f -exec sha256sum {} \; | sed 's|main/| |' >> Release
 
-    - name: Sign Release file
-      run: |
-        cd apt-repo/dists/stable
+      - name: Sign Release file
+        run: |
+          cd apt-repo/dists/stable
 
-        # Sign Release file
-        gpg --batch --yes --pinentry-mode loopback --passphrase "${{ secrets.GPG_PASSPHRASE }}" \
-            --default-key ${{ secrets.GPG_KEY_ID }} \
-            --armor --detach-sign --output Release.gpg Release
+          # Sign Release file
+          gpg --batch --yes --pinentry-mode loopback --passphrase "${{ secrets.GPG_PASSPHRASE }}" \
+              --default-key ${{ secrets.GPG_KEY_ID }} \
+              --armor --detach-sign --output Release.gpg Release
 
-        # Create InRelease file (clearsigned)
-        gpg --batch --yes --pinentry-mode loopback --passphrase "${{ secrets.GPG_PASSPHRASE }}" \
-            --default-key ${{ secrets.GPG_KEY_ID }} \
-            --armor --clearsign --output InRelease Release
+          # Create InRelease file (clearsigned)
+          gpg --batch --yes --pinentry-mode loopback --passphrase "${{ secrets.GPG_PASSPHRASE }}" \
+              --default-key ${{ secrets.GPG_KEY_ID }} \
+              --armor --clearsign --output InRelease Release
 
-    - name: Export public GPG key
-      run: |
-        # Export public key for users to import
-        gpg --armor --export ${{ secrets.GPG_KEY_ID }} > apt-repo/pubkey.gpg
+      - name: Export public GPG key
+        run: |
+          # Export public key for users to import
+          gpg --armor --export ${{ secrets.GPG_KEY_ID }} > apt-repo/pubkey.gpg
 
-    - name: Create repository index page
-      run: |
-        cat > apt-repo/index.html << 'EOF'
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>DragonflyDB APT Repository</title>
-            <style>
-                body { font-family: Arial, sans-serif; margin: 40px; }
-                .code { background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace; }
-                .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 5px; margin: 20px 0; }
-            </style>
-        </head>
-        <body>
-            <h1>DragonflyDB APT Repository</h1>
-            <div class="warning">
-                <strong>⚠️ Unofficial Repository:</strong> This is an unofficial mirror of DragonflyDB packages.
-                For official packages, visit <a href="https://github.com/dragonflydb/dragonfly/releases">DragonflyDB Releases</a>.
-            </div>
+      - name: Create repository index page
+        run: |
+          cat > apt-repo/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>DragonflyDB APT Repository</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; }
+                  .code { background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace; }
+                  .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 5px; margin: 20px 0; }
+              </style>
+          </head>
+          <body>
+              <h1>DragonflyDB APT Repository</h1>
+              <div class="warning">
+                  <strong>⚠️ Unofficial Repository:</strong> This is an unofficial mirror of DragonflyDB packages.
+                  For official packages, visit <a href="https://github.com/dragonflydb/dragonfly/releases">DragonflyDB Releases</a>.
+              </div>
 
-            <h2>Quick Setup</h2>
-            <p>Add this repository to your system:</p>
-            <div class="code">
-        # Add GPG key<br>
-        curl -fsSL https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pubkey.gpg | sudo gpg --dearmor -o /usr/share/keyrings/dragonflydb.gpg<br><br>
+              <h2>Quick Setup</h2>
+              <p>Add this repository to your system:</p>
+              <div class="code">
+          # Add GPG key<br>
+          curl -fsSL https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pubkey.gpg | sudo gpg --dearmor -o /usr/share/keyrings/dragonflydb.gpg<br><br>
 
-        # Add repository<br>
-        echo "deb [signed-by=/usr/share/keyrings/dragonflydb.gpg] https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }} stable main" | sudo tee /etc/apt/sources.list.d/dragonflydb.list<br><br>
+          # Add repository<br>
+          echo "deb [signed-by=/usr/share/keyrings/dragonflydb.gpg] https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }} stable main" | sudo tee /etc/apt/sources.list.d/dragonflydb.list<br><br>
 
-        # Update package list<br>
-        sudo apt update<br><br>
+          # Update package list<br>
+          sudo apt update<br><br>
 
-        # Install DragonflyDB<br>
-        sudo apt install dragonfly
-            </div>
+          # Install DragonflyDB<br>
+          sudo apt install dragonfly
+              </div>
 
-            <h2>Available Packages</h2>
-            <ul>
-        EOF
+              <h2>Available Packages</h2>
+              <ul>
+          EOF
 
-        # List all deb packages
-        find apt-repo/pool/main -name "*.deb" -printf '<li><a href="pool/main/%f">%f</a></li>\n' >> apt-repo/index.html
+          # List all deb packages
+          find apt-repo/pool/main -name "*.deb" -printf '<li><a href="pool/main/%f">%f</a></li>\n' >> apt-repo/index.html
 
-        cat >> apt-repo/index.html << 'EOF'
-            </ul>
+          cat >> apt-repo/index.html << 'EOF'
+              </ul>
 
-            <h2>Repository Information</h2>
-            <ul>
-                <li><strong>Repository URL:</strong> https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}</li>
-                <li><strong>Distribution:</strong> stable</li>
-                <li><strong>Component:</strong> main</li>
-                <li><strong>Architecture:</strong> amd64</li>
-                <li><strong>GPG Key:</strong> <a href="pubkey.gpg">Download</a></li>
-            </ul>
+              <h2>Repository Information</h2>
+              <ul>
+                  <li><strong>Repository URL:</strong> https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}</li>
+                  <li><strong>Distribution:</strong> stable</li>
+                  <li><strong>Component:</strong> main</li>
+                  <li><strong>Architecture:</strong> amd64</li>
+                  <li><strong>GPG Key:</strong> <a href="pubkey.gpg">Download</a></li>
+              </ul>
 
-            <p><small>Last updated: $(date)</small></p>
-            <p><small>Source: <a href="https://github.com/${{ github.repository }}">GitHub Repository</a></small></p>
-        </body>
-        </html>
-        EOF
+              <p><small>Last updated: $(date)</small></p>
+              <p><small>Source: <a href="https://github.com/${{ github.repository }}">GitHub Repository</a></small></p>
+          </body>
+          </html>
+          EOF
 
-    - name: Check for changes
-      id: check-changes
-      run: |
-        if git diff --quiet; then
-          echo "No changes detected"
-          echo "has_changes=false" >> $GITHUB_OUTPUT
-        else
-          echo "Changes detected"
-          echo "has_changes=true" >> $GITHUB_OUTPUT
-        fi
-
-    - name: Commit and push changes
-      if: steps.check-changes.outputs.has_changes == 'true'
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add apt-repo/
-        git commit -m "Update APT repository - $(date)"
-        git push
-
-    - name: Setup Pages
-      if: steps.check-changes.outputs.has_changes == 'true'
-      uses: actions/configure-pages@v4
-
-    - name: Upload artifact
-      if: steps.check-changes.outputs.has_changes == 'true'
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: './apt-repo'
-
-    - name: Deploy to GitHub Pages
-      if: steps.check-changes.outputs.has_changes == 'true'
-      id: deployment
-      uses: actions/deploy-pages@v4
-
-    - name: Summary
-      run: |
-        echo "## APT Repository Update Summary" >> $GITHUB_STEP_SUMMARY
-        echo "Repository URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> $GITHUB_STEP_SUMMARY
-
-        if [ "${{ steps.check-changes.outputs.has_changes }}" == "true" ]; then
-          echo "✅ Repository updated successfully" >> $GITHUB_STEP_SUMMARY
-          echo "### New packages added:" >> $GITHUB_STEP_SUMMARY
-          if [ -n "${{ steps.fetch-releases.outputs.downloaded_packages }}" ]; then
-            echo "${{ steps.fetch-releases.outputs.downloaded_packages }}" | tr ' ' '\n' | sed 's/^/- /' >> $GITHUB_STEP_SUMMARY
+      - name: Check for changes
+        id: check-changes
+        run: |
+          if git diff --quiet; then
+            echo "No changes detected"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
           else
-            echo "- No new packages" >> $GITHUB_STEP_SUMMARY
+            echo "Changes detected"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
-        else
-          echo "ℹ️ No updates needed - repository is up to date" >> $GITHUB_STEP_SUMMARY
-        fi
+
+      - name: Commit and push changes
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add apt-repo/
+          git commit -m "Update APT repository - $(date)"
+          git push
+
+      - name: Setup Pages
+        if: steps.check-changes.outputs.has_changes == 'true'
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        if: steps.check-changes.outputs.has_changes == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./apt-repo"
+
+      - name: Deploy to GitHub Pages
+        if: steps.check-changes.outputs.has_changes == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Summary
+        run: |
+          echo "## APT Repository Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Repository URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.check-changes.outputs.has_changes }}" == "true" ]; then
+            echo "✅ Repository updated successfully" >> $GITHUB_STEP_SUMMARY
+            echo "### New packages added:" >> $GITHUB_STEP_SUMMARY
+            if [ -n "${{ steps.fetch-releases.outputs.downloaded_packages }}" ]; then
+              echo "${{ steps.fetch-releases.outputs.downloaded_packages }}" | tr ' ' '\n' | sed 's/^/- /' >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- No new packages" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "ℹ️ No updates needed - repository is up to date" >> $GITHUB_STEP_SUMMARY
+          fi
