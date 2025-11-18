@@ -1,22 +1,5 @@
 Package: dragonfly
 Architecture: amd64
-Version: 1.25.5
-Priority: optional
-Section: database
-Maintainer: DragonflyDB authors  <dragonfly@dragonflydb.io>
-Installed-Size: 29918
-Depends: libc6, openssl, adduser, zstd
-Filename: pool/main/dragonfly_1.25.5_amd64.deb
-Size: 11239036
-MD5sum: d5d765574d508c7ab756a409efc981ca
-SHA1: f3251f41c9ba088a096df4a4ec97a7777a53c6e0
-SHA256: b610620a60936ed0c22e67993fa8252b3d1d47190f873075ffab623cd1e6f2a4
-SHA512: b02f2bc3c50271588cf4edfb7b8d7ae1c4ab0b52928c0f3a3068a4adeafbb1eac1d301ade2f529ab9d0554b1e8b5df3a6335a7b24977f9e14552d557cbb4cd0c
-Homepage: https://dragonflydb.io
-Description: A fast in-memory store that is fully compatible with Redis™* and Memcached.
-
-Package: dragonfly
-Architecture: amd64
 Version: 1.25.6
 Priority: optional
 Section: database
@@ -488,6 +471,23 @@ MD5sum: 810b0d3df56c3f6d8ce4627ef2200697
 SHA1: 785df352a06ca319619621379d4a23910a39d65d
 SHA256: 5693220d0ef3c4861cece1d58e41da5b38cd85331ff446ba176465003c5a6221
 SHA512: b4410e3c513adf9db01ad7e40375369dcc52fa52b6f17117f57d931ef37e08d5f02bae990c54bc4853dbcda13d3ac74006b783a0a1363d9214a621162b865185
+Homepage: https://dragonflydb.io
+Description: A fast in-memory store that is fully compatible with Redis™* and Memcached.
+
+Package: dragonfly
+Architecture: amd64
+Version: 1.35.0
+Priority: optional
+Section: database
+Maintainer: DragonflyDB authors  <dragonfly@dragonflydb.io>
+Installed-Size: 35187
+Depends: libc6, openssl, adduser, zstd
+Filename: pool/main/dragonfly_1.35.0_amd64.deb
+Size: 13154932
+MD5sum: 1947eef7f788849965810247a9866feb
+SHA1: 6bcc84cbcafb68eb879ef8ab2fb339a2865f4626
+SHA256: 62d1c4f231f2b9e13d887c9676de0f2a4b2423d0b71f5342fa01a0dde13f9217
+SHA512: 77652493107c08781e10a1b3433dfce2e74b7d3374674149047f7aaed7103923bbdad0ab61ff95bc7394d57aaf882e5efcbb675e1bb27bdb30801f79e014c25b
 Homepage: https://dragonflydb.io
 Description: A fast in-memory store that is fully compatible with Redis™* and Memcached.
 
