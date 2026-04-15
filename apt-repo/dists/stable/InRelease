@@ -5,40 +5,40 @@ Acquire-By-Hash: yes
 Architectures: amd64
 Codename: stable
 Components: main
-Date: Tue, 14 Apr 2026 07:27:53 +0000
+Date: Wed, 15 Apr 2026 07:28:16 +0000
 Description: DragonflyDB APT Repository - Unofficial mirror
 Label: dragonflydb
 Origin: DragonflyDB APT Repository
 Suite: stable
 MD5Sum:
- 1ba96ca6ba2118d8231f4fb10909ee4f              242 Release
+ f547688f7fb713a06c611454fecede20              242 Release
  6d322761ccdba08e251107fd5c049e99            20242 main/binary-amd64/Packages
- 0b8a32a345a838b7fb35f5114020a66a             5696 main/binary-amd64/Packages.gz
+ c17e82207f7932410d44de0a4eeb611c             5696 main/binary-amd64/Packages.gz
 SHA1:
- 77021274fba61c02159de3ab836b126d2de2da1a              242 Release
+ 67bafc606fd0173b175ef78b0084b013b11f40a0              242 Release
  3bed091a1e932f8d7cb4d3e30cab7a26015128e6            20242 main/binary-amd64/Packages
- 8dfedd19149a9fa101b6678fd5af1bf14725a415             5696 main/binary-amd64/Packages.gz
+ 3fecc6332d3442b5bcef0bd883da3b88f8be807a             5696 main/binary-amd64/Packages.gz
 SHA256:
- 314249096f324bdf6b664d5ddc14e1e687da1c2104811ab353753550f039244e              242 Release
+ e5a78465df109544cb84d993a68bf78d6c2a1d59835dbf35967e0e6023146e2c              242 Release
  300eff7271a72c9c889ba0b49373e6d9db202887a959625db5ddd74ed9e5bf02            20242 main/binary-amd64/Packages
- d35a68ec46431aa65889d08426713a3b9899878d0cce89a4dbcfe3fc651b64f3             5696 main/binary-amd64/Packages.gz
+ 01b10cf5159b593cabfe43f80c279f4b1fa2d2fc14543cf84616bfa553da5d02             5696 main/binary-amd64/Packages.gz
 SHA512:
- 04387b27e9374ed01cdd33878f8975a1869fd7b5bca6dfc1a85d1184a7c89c29f51185c6e7b5eea19a9678330b610cf6a31cd25329cb79bdcab97380719d3d1c              242 Release
+ 058d8cfc9dfaf300c2f0248040d4e4dfbbd29d419a05d7676516a779d413994392051f3cbe1e86cfb669341662ff22161c417739256bfed3494198ef6e1e29e1              242 Release
  e770b2efe091257939f4f11d7ff47e213532989dcd20e6f3ffaa69568e82486a0476e37e3ded3e91fbb48aecf58c5a16426523e74efbb60ddc7d649f4c877d44            20242 main/binary-amd64/Packages
- 0c8d151b1c0b4f3276f9b5fa6e0fa019618efd0273128db287cbd131fd987013812fd50f5a508ec9407e825421bf3a3981fe2d4dd858a4db9e756c1bdb045ce6             5696 main/binary-amd64/Packages.gz
+ 91171eeff8313e8f2e0cb7567245146ebc75d9886aff434bc5100e5c948371bcdf40e54bf365e448583a663a06ca3a4751bf158eee6ad38e37bd64a8d17de752             5696 main/binary-amd64/Packages.gz
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEkevwvzKy+OLMX2XZKtCRK14JOS4FAmnd7HoACgkQKtCRK14J
-OS5srQ//ZV8T2XB8uiLkrHQY/Jhv9Fz8xE7CVKRPOdAmRTOuptuHay493flzm5av
-kABZPpQVZ+yIO3Q2vAuUt75NZqsmouGiHmb4mcoH1eDv0FD1urug3uZpCxfgOKg5
-/0rvdleJJfmI6qi8ZqNsGMwwgsfz1qW/b+QFnhZT/Rc/t1NRqGVeGLlzjjhRx1cC
-CTpMbhaWwJL8OxHzsqXfB1g2pUzRQJ0ki4suQmNS1DK4Ju5Eg75rhYVHIzh4Ev78
-lSvDRDcyjI1UkDRfhDcdz4NLaYPPWlwPB2Xm9TwVgEdfqDRli1JFKCgEsPloGyZB
-IG731jTcAtND14HQHUywhtV32PENMbWP2zD6C68mIauTXS9C05t3fgiOxYbdaX+D
-KxMsvManpWps+qMzCLUxhHFIrYML2MPS8T9ZNn5w3Z1lPvDyKtY4/Sz+a6Pkljys
-xNOgPDP1Qh1UbRSLZz9Jfkqf1+Cvnhoxj8R36C5eH8kLnLwbe1CuTmty/Cuy8MsO
-QnHPPlugWYf0q6OXou+4WRyUl/SJYi0S99cmRPSQNdF+47E2H/Pum6GE+h9hy+JJ
-v7TRX4JAfjvzt4gKq/7fHO1y94T+REKbXQjh1L8k5q9XDn5dFpHLztWjouyjb6Zk
-cM60aeOqrjGydv56DDzYc3BGWJ1F5X8vuFbWb2hmXHIUFOCo9DE=
-=uWNE
+iQIzBAEBCgAdFiEEkevwvzKy+OLMX2XZKtCRK14JOS4FAmnfPhEACgkQKtCRK14J
+OS6sRw//ZWIukgYzNu/ArrTtR5gLEH6gDBKWhSUDWtBUKwHlub0pptDc9XbdrOQi
+eX5ePXahZj3gsfKo7jtxusIsyL7cgYEAMmuYwjc2o61SJxMn9qF+4SXYCwaz5zxO
+oxFtUzOXMIwVN/iBIXDmuKl06Ze+UvM7DQe3aooa24u1ynee2Sff1j2BiH79CuSa
+hmMMbLxkqwsmJba9/EYyCO4tM5ELWRhSjT3Yn8RllNw2StZU2ZXkbGBvMSOzBpXT
+mHxTxthYLCX2qTw5dULWYCYyk7iJryB26lUtxJJ0J7rZC36NPm7qN8BkV+VFmX2I
+4ut5nNhI90uH7cVXBIOa/h7NEBCKcx0GZL7otzLjEllEcgArk+S5SP1a6+2lYYxA
+JUcfKEHbAP1jwTFK9igyoRmZRh4kwjfUmZlhjLvtQNpbBL90CqJLMVHh/k5+SgY9
+oiMuyw7sQFdmTCJ6ihzwRpQ5i3Y0gnTmxyI1lJk6IJPvtG8H5o48ulAFPq/rvZ5v
+lDdwu0teoanV2I2A32ImLwl5eaLGn2Oj6ZsyQivQHhVxSKI2GS4TM0i9XrkTbgom
+07SVhw5kkY/3oBMAUtmigkSbnChldgFaKBrubZXlFvO75iv6tAkVmwL5pXT+ZIWx
+pb5xNvou/mUvgcohK2oxoaVCWs/PDZREMj63EGEjKM+M8R/kB2k=
+=1HGP
 -----END PGP SIGNATURE-----
