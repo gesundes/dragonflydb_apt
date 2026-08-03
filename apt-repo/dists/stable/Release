@@ -2,24 +2,24 @@ Acquire-By-Hash: yes
 Architectures: amd64
 Codename: stable
 Components: main
-Date: Sun, 02 Aug 2026 08:20:00 +0000
+Date: Mon, 03 Aug 2026 09:38:35 +0000
 Description: DragonflyDB APT Repository - Unofficial mirror
 Label: dragonflydb
 Origin: DragonflyDB APT Repository
 Suite: stable
 MD5Sum:
- 04f68717b8e7a350660f6e1ba7e6471b              242 Release
+ ef039288d123bf99dc1feee9f7bbdb5a              242 Release
  998712c54d9e289480cdca3097bdba18            20940 main/binary-amd64/Packages
- ab5398f9638b7099cf72c36f5b2ac0d6             5885 main/binary-amd64/Packages.gz
+ 2b3f6910c699c49ddb325bd56c0923cd             5885 main/binary-amd64/Packages.gz
 SHA1:
- 91d379592fc3486f3396258e756a7bd995ed27a8              242 Release
+ b1934a54f458617d864f8e839d21c5ca1c6a096e              242 Release
  5697895ca33955fddacc39eb3a4bf9589c9f42b4            20940 main/binary-amd64/Packages
- 16b10d604c4864959b6986be097b7a2a60bb135b             5885 main/binary-amd64/Packages.gz
+ 335aff2fac03ecd33fb2e74cf50478ce6c885487             5885 main/binary-amd64/Packages.gz
 SHA256:
- 58125cc9236a4c1476fffe13f3b618c9718efb76b80f2a315065bccca4e006b9              242 Release
+ c34b81f24bb255ede784699cfa95febabf7ee03a1846e4617a4b1b06f99a9704              242 Release
  5f7fd4ddbd6c28a13abafe2b8e798fed9d33d776d2759b175c78de32aaf23192            20940 main/binary-amd64/Packages
- 5b853ac5ee242f5758c46191f8e97cd427f7761acd38072d689914b8ab646acc             5885 main/binary-amd64/Packages.gz
+ cccdd9316e5955803bff059c674f6074364d3e4c10245ca9a21c952ceba5defb             5885 main/binary-amd64/Packages.gz
 SHA512:
- 9b312ea0a438db0d1b8048fc24ca31b16965ce8b8e799c8b43e4eab62befb35f3684fbd688191e95e34df8814ccc97ca6792e5b375f22877a658aa1f7ac8aad6              242 Release
+ 8a1bb01df90e95f8e75a5b315ef24a69f674448ff6d16ec86ee7d4968b5c9323dfaffc2faf5a0289bfe5efc32e4712e90f718a2b8ed7449a4c443ef6436c814d              242 Release
  edf37d2af96e5e828a5c56737ceb6fca307dc6cbed67c5dba1a6c4eb100440d603a92638943de838c3e66899f1519d295c855577a5346f41d19eb59291c2d02b            20940 main/binary-amd64/Packages
- 623ad38e2b55fa0cdac9d8dfff616f779f99c8d155dd977faf68da039ca87cd188183f1159dfbd9256c1021b3792ad1f88685b67694272c2d59bd4882a2e33a2             5885 main/binary-amd64/Packages.gz
+ 792e0edbe68e212564f84bb079b55753f335de3abdd73b099053caaffedf28a23e9ca3531bd3b56e3c6de8227349b7d00bc8bf03594b5cd551297f846f1cb4e7             5885 main/binary-amd64/Packages.gz
