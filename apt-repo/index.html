@@ -13,13 +13,14 @@
     <div class="warning">
         <strong>⚠️ Unofficial Repository:</strong> This is an unofficial mirror of DragonflyDB packages.
         For official packages, visit <a href="https://github.com/dragonflydb/dragonfly/releases">DragonflyDB Releases</a>.
+        See the <a href="https://github.com/dragonflydb/dragonfly">official GitHub repository</a> and <a href="https://www.dragonflydb.io/docs/getting-started/native-packages#debianubuntu-based-distributions">official APT repository setup instructions</a>.
     </div>
 
     <h2>Quick Setup</h2>
     <p>Add this repository to your system:</p>
     <div class="code">
 # Add GPG key (install into apt keyrings)<br>
-sudo install -d -m 0755 /etc/apt/keyrings<br>
+sudo mkdir -p -m 0755 /etc/apt/keyrings<br>
 curl -fsSL https://gesundes.github.io/dragonflydb_apt/pubkey.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dragonflydb.gpg<br>
 sudo chmod 0644 /etc/apt/keyrings/dragonflydb.gpg<br><br>
 
@@ -37,36 +38,66 @@ sudo apt install dragonfly
 
     <h2>Available Packages</h2>
     <ul>
-<li><a href="pool/main/dragonfly_1.27.4_amd64.deb">dragonfly_1.27.4_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.28.0_amd64.deb">dragonfly_1.28.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.28.1_amd64.deb">dragonfly_1.28.1_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.28.2_amd64.deb">dragonfly_1.28.2_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.29.0_amd64.deb">dragonfly_1.29.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.30.0_amd64.deb">dragonfly_1.30.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.30.1_amd64.deb">dragonfly_1.30.1_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.30.2_amd64.deb">dragonfly_1.30.2_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.30.3_amd64.deb">dragonfly_1.30.3_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.31.0_amd64.deb">dragonfly_1.31.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.31.1_amd64.deb">dragonfly_1.31.1_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.31.2_amd64.deb">dragonfly_1.31.2_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.32.0_amd64.deb">dragonfly_1.32.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.33.0_amd64.deb">dragonfly_1.33.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.33.1_amd64.deb">dragonfly_1.33.1_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.34.0_amd64.deb">dragonfly_1.34.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.34.1_amd64.deb">dragonfly_1.34.1_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.34.2_amd64.deb">dragonfly_1.34.2_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.35.1_amd64.deb">dragonfly_1.35.1_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.36.0_amd64.deb">dragonfly_1.36.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.37.0_amd64.deb">dragonfly_1.37.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.37.2_amd64.deb">dragonfly_1.37.2_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.38.0_amd64.deb">dragonfly_1.38.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.38.1_amd64.deb">dragonfly_1.38.1_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.39.0_amd64.deb">dragonfly_1.39.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.40.0_amd64.deb">dragonfly_1.40.0_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.40.1_amd64.deb">dragonfly_1.40.1_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_1.40.2_amd64.deb">dragonfly_1.40.2_amd64.deb</a></li>
-<li><a href="pool/main/dragonfly_2.0.0_amd64.deb">dragonfly_2.0.0_amd64.deb</a></li>
 <li><a href="pool/main/dragonfly_2.0.2_amd64.deb">dragonfly_2.0.2_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_2.0.2_arm64.deb">dragonfly_2.0.2_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_2.0.0_amd64.deb">dragonfly_2.0.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_2.0.0_arm64.deb">dragonfly_2.0.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.40.2_amd64.deb">dragonfly_1.40.2_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.40.2_arm64.deb">dragonfly_1.40.2_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.40.1_amd64.deb">dragonfly_1.40.1_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.40.1_arm64.deb">dragonfly_1.40.1_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.40.0_amd64.deb">dragonfly_1.40.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.40.0_arm64.deb">dragonfly_1.40.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.39.0_amd64.deb">dragonfly_1.39.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.39.0_arm64.deb">dragonfly_1.39.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.38.1_amd64.deb">dragonfly_1.38.1_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.38.1_arm64.deb">dragonfly_1.38.1_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.38.0_amd64.deb">dragonfly_1.38.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.38.0_arm64.deb">dragonfly_1.38.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.37.2_amd64.deb">dragonfly_1.37.2_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.37.2_arm64.deb">dragonfly_1.37.2_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.37.0_amd64.deb">dragonfly_1.37.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.37.0_arm64.deb">dragonfly_1.37.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.36.0_amd64.deb">dragonfly_1.36.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.36.0_arm64.deb">dragonfly_1.36.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.35.1_amd64.deb">dragonfly_1.35.1_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.35.1_arm64.deb">dragonfly_1.35.1_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.34.2_amd64.deb">dragonfly_1.34.2_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.34.2_arm64.deb">dragonfly_1.34.2_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.34.1_amd64.deb">dragonfly_1.34.1_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.34.1_arm64.deb">dragonfly_1.34.1_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.34.0_amd64.deb">dragonfly_1.34.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.34.0_arm64.deb">dragonfly_1.34.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.33.1_amd64.deb">dragonfly_1.33.1_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.33.1_arm64.deb">dragonfly_1.33.1_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.33.0_amd64.deb">dragonfly_1.33.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.33.0_arm64.deb">dragonfly_1.33.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.32.0_amd64.deb">dragonfly_1.32.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.32.0_arm64.deb">dragonfly_1.32.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.31.2_amd64.deb">dragonfly_1.31.2_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.31.2_arm64.deb">dragonfly_1.31.2_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.31.1_amd64.deb">dragonfly_1.31.1_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.31.1_arm64.deb">dragonfly_1.31.1_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.31.0_amd64.deb">dragonfly_1.31.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.31.0_arm64.deb">dragonfly_1.31.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.30.3_amd64.deb">dragonfly_1.30.3_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.30.3_arm64.deb">dragonfly_1.30.3_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.30.2_amd64.deb">dragonfly_1.30.2_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.30.2_arm64.deb">dragonfly_1.30.2_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.30.1_amd64.deb">dragonfly_1.30.1_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.30.1_arm64.deb">dragonfly_1.30.1_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.30.0_amd64.deb">dragonfly_1.30.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.30.0_arm64.deb">dragonfly_1.30.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.29.0_amd64.deb">dragonfly_1.29.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.29.0_arm64.deb">dragonfly_1.29.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.28.2_amd64.deb">dragonfly_1.28.2_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.28.2_arm64.deb">dragonfly_1.28.2_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.28.1_amd64.deb">dragonfly_1.28.1_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.28.1_arm64.deb">dragonfly_1.28.1_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.28.0_amd64.deb">dragonfly_1.28.0_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.28.0_arm64.deb">dragonfly_1.28.0_arm64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.27.4_amd64.deb">dragonfly_1.27.4_amd64.deb</a></li>
+<li><a href="pool/main/dragonfly_1.27.4_arm64.deb">dragonfly_1.27.4_arm64.deb</a></li>
     </ul>
 
     <h2>Repository Information</h2>
@@ -74,11 +105,11 @@ sudo apt install dragonfly
         <li><strong>Repository URL:</strong> https://gesundes.github.io/dragonflydb_apt</li>
         <li><strong>Distribution:</strong> stable</li>
         <li><strong>Component:</strong> main</li>
-        <li><strong>Architecture:</strong> amd64</li>
+        <li><strong>Architectures:</strong> amd64 (x86_64), arm64 (aarch64)</li>
         <li><strong>GPG Key:</strong> <a href="pubkey.gpg">Download</a></li>
     </ul>
 
-    <p><small>Last updated: Sun, 11 Oct 2026 12:05:00 +0000</small></p>
+    <p><small>Last updated: Mon, 12 Oct 2026 13:32:23 +0000</small></p>
     <p><small>Source: <a href="https://github.com/gesundes/dragonflydb_apt">GitHub Repository</a></small></p>
 </body>
 </html>
