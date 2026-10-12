@@ -9,6 +9,7 @@ dragonflydb-apt-private.key
 # Downloaded packages (temporary)
 downloads/
 *.deb
+!apt-repo/pool/main/*.deb
 
 # IDE and Editor files
 .vscode/

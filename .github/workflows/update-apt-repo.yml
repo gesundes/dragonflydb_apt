@@ -34,14 +34,14 @@ jobs:
 
       - name: Create apt repository structure
         run: |
-          mkdir -p apt-repo/{dists/stable/main/binary-amd64,pool/main}
+          mkdir -p apt-repo/{dists/stable/main/binary-amd64,dists/stable/main/binary-arm64,pool/main}
           mkdir -p apt-repo/dists/stable/main/source
 
       - name: Fetch latest DragonflyDB releases
         id: fetch-releases
         run: |
           # Get all releases from GitHub API (non-draft, non-prerelease)
-          releases_json=$(curl -s "https://api.github.com/repos/dragonflydb/dragonfly/releases")
+          releases_json=$(curl -fsSL "https://api.github.com/repos/dragonflydb/dragonfly/releases")
 
           # Create downloads directory
           mkdir -p downloads
@@ -50,78 +50,54 @@ jobs:
           # Track downloaded packages
           downloaded_packages=""
 
-          # For each release asset that matches an amd64 deb, download it and rename
-          # using the release tag (strip leading 'v' if present) to avoid filename collisions.
-          #
-          # We output lines: <tag> <url> <orig_name>
-          echo "$releases_json" | jq -r '
-            .[]
-            | select(.draft == false and .prerelease == false)
-            | .tag_name as $tag
-            | .assets[]
-            | select(.name | test(".*amd64.*\\.deb$"))
-            | "\($tag) \(.browser_download_url) \(.name)"
-          ' | while read -r tag url orig_name; do
+          # Materialize selection so API/JSON failures stop the step and the loop keeps its variables.
+          echo "$releases_json" | jq -r '.[] | select(.draft == false and .prerelease == false) | .tag_name as $tag | .assets[] | select(.name | test("^dragonfly(_[^/]+)?_(amd64|arm64)\\.deb$")) | "\($tag) \(.browser_download_url) \(.name)"' > downloads/assets.txt
+          while read -r tag url orig_name; do
             # Normalize tag to a version string (remove leading "v" if present)
-            version=$(echo "$tag" | sed "s/^v//")
-            # Generate a new unique filename by inserting the version.
-            # If origin name already includes the version, this preserves it.
-            # Common source name is dragonfly_amd64.deb -> produce dragonfly_<version>_amd64.deb
-            new_name=$(echo "$orig_name" | sed -E "s/^(dragonfly)(_.*)?(_amd64\\.deb)$/\\1_${version}_amd64.deb/; t; s/\\.deb$/_${version}.deb/")
-
-            # Fallback: if sed didn't transform (unexpected name), append version before .deb
-            if [ "$new_name" = "$orig_name" ]; then
-              new_name="${orig_name%.deb}_${version}.deb"
-            fi
+            version=${tag#v}
+            # Keep the existing amd64 naming scheme for both architectures.
+            arch=${orig_name##*_}
+            arch=${arch%.deb}
+            [[ "$version" =~ ^[0-9][0-9A-Za-z.+:~_-]*$ ]] || exit 1
+            new_name="dragonfly_${version}_${arch}.deb"
 
             dest_path="apt-repo/pool/main/$new_name"
 
             if [ ! -f "$dest_path" ]; then
               echo "Downloading $orig_name (release: $tag) -> $new_name"
               # Download to a temporary filename to avoid collisions
-              tmpfile="downloads/${version}_tmp.deb"
+              tmpfile="downloads/${version}_${arch}_tmp.deb"
               curl -L -f -o "$tmpfile" "$url"
-              # Simple sanity check: file exists and non-empty
-              if [ -s "$tmpfile" ]; then
-                mv "$tmpfile" "$dest_path"
-                downloaded_packages="$downloaded_packages $new_name"
-              else
-                echo "Download failed or empty for $url"
-                rm -f "$tmpfile"
-              fi
+              test "$(dpkg-deb -f "$tmpfile" Architecture)" = "$arch"
+              dpkg-deb --contents "$tmpfile" > /dev/null
+              mv "$tmpfile" "$dest_path"
+              downloaded_packages="$downloaded_packages $new_name"
             else
               echo "Package $new_name already exists, skipping..."
             fi
-          done
+          done < downloads/assets.txt
 
           # Save downloaded packages list for next step
-          echo "downloaded_packages=$downloaded_packages" >> $GITHUB_OUTPUT
+          echo "downloaded_packages=$downloaded_packages" >> "$GITHUB_OUTPUT"
 
       - name: Generate Packages file
         run: |
           cd apt-repo
 
           # Generate Packages file with apt-ftparchive (ensures proper fields)
-          apt-ftparchive packages pool/main > dists/stable/main/binary-amd64/Packages
-
-          # Compress Packages file
-          gzip -9fk dists/stable/main/binary-amd64/Packages
+          for arch in amd64 arm64; do apt-ftparchive -a "$arch" packages pool/main > "dists/stable/main/binary-$arch/Packages"; gzip -9nfk "dists/stable/main/binary-$arch/Packages"; done
 
       - name: Generate Release file
         run: |
           # Use apt-ftparchive to generate Release with proper checksums and sizes
           cd apt-repo
 
-          # Ensure Packages and Packages.gz exist (idempotent)
-          apt-ftparchive packages pool/main > dists/stable/main/binary-amd64/Packages
-          gzip -9fk dists/stable/main/binary-amd64/Packages
-
           apt-ftparchive \
             -o APT::FTPArchive::Release::Origin="DragonflyDB APT Repository" \
             -o APT::FTPArchive::Release::Label="dragonflydb" \
             -o APT::FTPArchive::Release::Suite="stable" \
             -o APT::FTPArchive::Release::Codename="stable" \
-            -o APT::FTPArchive::Release::Architectures="amd64" \
+            -o APT::FTPArchive::Release::Architectures="amd64 arm64" \
             -o APT::FTPArchive::Release::Components="main" \
             -o APT::FTPArchive::Release::Description="DragonflyDB APT Repository - Unofficial mirror" \
             -o APT::FTPArchive::Release::Acquire-By-Hash="yes" \
@@ -167,13 +143,14 @@ jobs:
               <div class="warning">
                   <strong>⚠️ Unofficial Repository:</strong> This is an unofficial mirror of DragonflyDB packages.
                   For official packages, visit <a href="https://github.com/dragonflydb/dragonfly/releases">DragonflyDB Releases</a>.
+                  See the <a href="https://github.com/dragonflydb/dragonfly">official GitHub repository</a> and <a href="https://www.dragonflydb.io/docs/getting-started/native-packages#debianubuntu-based-distributions">official APT repository setup instructions</a>.
               </div>
 
               <h2>Quick Setup</h2>
               <p>Add this repository to your system:</p>
               <div class="code">
           # Add GPG key (install into apt keyrings)<br>
-          sudo install -d -m 0755 /etc/apt/keyrings<br>
+          sudo mkdir -p -m 0755 /etc/apt/keyrings<br>
           curl -fsSL https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pubkey.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dragonflydb.gpg<br>
           sudo chmod 0644 /etc/apt/keyrings/dragonflydb.gpg<br><br>
 
@@ -194,7 +171,7 @@ jobs:
           EOF
 
           # List all deb packages
-          find apt-repo/pool/main -name "*.deb" -printf '%f\n' | sort -t _ -k2,2V -r | awk -v p='pool/main/' '{printf "<li><a href=\"%s%s\">%s</a></li>\n",p,$0,$0}' >> apt-repo/index.html
+          find apt-repo/pool/main -name "*.deb" -printf '%f\n' | sort -t _ -k2,2Vr -k3,3 | awk -v p='pool/main/' '{printf "<li><a href=\"%s%s\">%s</a></li>\n",p,$0,$0}' >> apt-repo/index.html
 
           cat >> apt-repo/index.html << 'EOF'
               </ul>
@@ -204,7 +181,7 @@ jobs:
                   <li><strong>Repository URL:</strong> https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}</li>
                   <li><strong>Distribution:</strong> stable</li>
                   <li><strong>Component:</strong> main</li>
-                  <li><strong>Architecture:</strong> amd64</li>
+                  <li><strong>Architectures:</strong> amd64 (x86_64), arm64 (aarch64)</li>
                   <li><strong>GPG Key:</strong> <a href="pubkey.gpg">Download</a></li>
               </ul>
 
@@ -220,12 +197,13 @@ jobs:
       - name: Check for changes
         id: check-changes
         run: |
-          if git diff --quiet; then
+          git add apt-repo/
+          if git diff --cached --quiet -- apt-repo/; then
             echo "No changes detected"
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
             echo "Changes detected"
-            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Commit and push changes
@@ -254,17 +232,17 @@ jobs:
 
       - name: Summary
         run: |
-          echo "## APT Repository Update Summary" >> $GITHUB_STEP_SUMMARY
-          echo "Repository URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "## APT Repository Update Summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "Repository URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> "$GITHUB_STEP_SUMMARY"
 
           if [ "${{ steps.check-changes.outputs.has_changes }}" == "true" ]; then
-            echo "✅ Repository updated successfully" >> $GITHUB_STEP_SUMMARY
-            echo "### New packages added:" >> $GITHUB_STEP_SUMMARY
+            echo "✅ Repository updated successfully" >> "$GITHUB_STEP_SUMMARY"
+            echo "### New packages added:" >> "$GITHUB_STEP_SUMMARY"
             if [ -n "${{ steps.fetch-releases.outputs.downloaded_packages }}" ]; then
-              echo "${{ steps.fetch-releases.outputs.downloaded_packages }}" | tr ' ' '\n' | sed 's/^/- /' >> $GITHUB_STEP_SUMMARY
+              echo "${{ steps.fetch-releases.outputs.downloaded_packages }}" | tr ' ' '\n' | sed 's/^/- /' >> "$GITHUB_STEP_SUMMARY"
             else
-              echo "- No new packages" >> $GITHUB_STEP_SUMMARY
+              echo "- No new packages" >> "$GITHUB_STEP_SUMMARY"
             fi
           else
-            echo "ℹ️ No updates needed - repository is up to date" >> $GITHUB_STEP_SUMMARY
+            echo "ℹ️ No updates needed - repository is up to date" >> "$GITHUB_STEP_SUMMARY"
           fi
