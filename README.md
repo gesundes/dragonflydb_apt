@@ -1,12 +1,13 @@
 # DragonflyDB APT Repository
 
-An automated APT repository that periodically mirrors DragonflyDB's amd64 deb packages from their official GitHub releases.
+An automated APT repository that periodically mirrors DragonflyDB's amd64 (x86_64) and arm64 (aarch64) deb packages from their official GitHub releases.
 
 ## ⚠️ Important Notice
 
 This is an **unofficial** repository that mirrors packages from the official DragonflyDB releases. For official support and packages, please visit:
 - [DragonflyDB Official Repository](https://github.com/dragonflydb/dragonfly)
 - [Official Releases](https://github.com/dragonflydb/dragonfly/releases)
+- [Official APT Repository Setup](https://www.dragonflydb.io/docs/getting-started/native-packages#debianubuntu-based-distributions)
 
 ## Features
 
@@ -102,7 +103,10 @@ The workflow runs automatically daily at 6 AM UTC, or you can trigger it manuall
 │   ├── dists/
 │   │   └── stable/
 │   │       └── main/
-│   │           └── binary-amd64/
+│   │           ├── binary-amd64/
+│   │           │   ├── Packages
+│   │           │   └── Packages.gz
+│   │           └── binary-arm64/
 │   │               ├── Packages
 │   │               └── Packages.gz
 │   ├── pool/
@@ -118,9 +122,9 @@ The workflow runs automatically daily at 6 AM UTC, or you can trigger it manuall
 
 1. **Scheduled Execution**: GitHub Actions runs daily at 6 AM UTC
 2. **Release Fetching**: Queries DragonflyDB's GitHub API for releases
-3. **Package Download**: Downloads new amd64 .deb packages to `pool/main/`
+3. **Package Download**: Downloads available amd64 and arm64 .deb packages to `pool/main/`, validating their architecture and archive contents. Older releases without arm64 packages are supported.
 4. **Repository Generation**: Creates proper APT repository structure:
-   - Generates `Packages` file using `dpkg-scanpackages`
+   - Generates separate `Packages` and `Packages.gz` files for each architecture using `apt-ftparchive`
    - Creates `Release` file with metadata and checksums
    - Signs files with GPG
 5. **Deployment**: Publishes to GitHub Pages if changes are detected
@@ -130,7 +134,9 @@ The workflow runs automatically daily at 6 AM UTC, or you can trigger it manuall
 ### Automatic Updates
 - Runs daily to check for new releases
 - Only downloads packages that aren't already present
-- Commits changes only if new packages are found
+- Commits changed metadata and new packages, keeping package files available for deployment from a fresh checkout
+- Keeps the existing GitHub API release window (the first page); does not scan the complete release history
+- Lists packages by descending version, with amd64 followed by arm64 for each version
 
 ### Security
 - GPG signs all repository metadata
@@ -157,8 +163,7 @@ You can test the package download logic locally:
 
 ```bash
 # Test package fetching
-curl -s "https://api.github.com/repos/dragonflydb/dragonfly/releases" | \
-jq -r '.[] | select(.draft == false and .prerelease == false) | .assets[] | select(.name | test(".*amd64.*\\.deb$")) | .browser_download_url'
+curl -fsSL "https://api.github.com/repos/dragonflydb/dragonfly/releases" | jq -r '.[] | select(.draft == false and .prerelease == false) | .assets[] | select(.name | test("^dragonfly(_[^/]+)?_(amd64|arm64)\\.deb$")) | .browser_download_url'
 ```
 
 ## Troubleshooting

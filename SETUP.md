@@ -130,9 +130,15 @@ After successful completion, check:
 - Your repository URL: `https://YOUR-USERNAME.github.io/YOUR-REPO-NAME/`
 - The `apt-repo/` directory should contain:
   - `dists/stable/main/binary-amd64/Packages`
+  - `dists/stable/main/binary-arm64/Packages`
+  - `Packages.gz` alongside each architecture's `Packages` file
   - `dists/stable/Release`
   - `pool/main/*.deb` files
   - `pubkey.gpg`
+
+The signed `Release` must list `Architectures: amd64 arm64`. Each package index must contain only its corresponding architecture. The homepage keeps a simple list sorted by descending version, with amd64 and arm64 links next to each other when both are available. It also links to the [official GitHub repository](https://github.com/dragonflydb/dragonfly), [releases](https://github.com/dragonflydb/dragonfly/releases), and [official APT setup documentation](https://www.dragonflydb.io/docs/getting-started/native-packages#debianubuntu-based-distributions), while identifying this mirror as unofficial.
+
+Package files under `apt-repo/pool/main/` are committed with the generated metadata so that the separate Pages workflow can publish a complete repository from a fresh checkout. The first update after enabling arm64 downloads the available packages within the existing release window; no full-history import is performed.
 
 ## Step 6: Clean Up Local Files
 
