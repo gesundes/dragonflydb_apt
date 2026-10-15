@@ -2,31 +2,31 @@ Acquire-By-Hash: yes
 Architectures: amd64 arm64
 Codename: stable
 Components: main
-Date: Wed, 14 Oct 2026 11:09:19 +0000
+Date: Thu, 15 Oct 2026 10:50:37 +0000
 Description: DragonflyDB APT Repository - Unofficial mirror
 Label: dragonflydb
 Origin: DragonflyDB APT Repository
 Suite: stable
 MD5Sum:
- 5f05a0addb0461e80bfedb1ec933043a              248 Release
+ df49b1cef3e4e0c38bc0e7556a4a8c99              248 Release
  46be2454dbd7785e2a5837e85da79792            20936 main/binary-amd64/Packages
  1ebb7b2d8c995fe8514e98184978d451             5887 main/binary-amd64/Packages.gz
  1fe8cb37a3a56503686c15123d5dac70            20936 main/binary-arm64/Packages
  019024e737a4efea7959340d6944fb6c             5904 main/binary-arm64/Packages.gz
 SHA1:
- b15f000e9a58ea572b374c919a7d0e1909507469              248 Release
+ c366e390f245d8f7a1302a1fb3556efcaf0d0c31              248 Release
  53de3b74139d76ab7b66995be13429762bf47651            20936 main/binary-amd64/Packages
  b91fbf92ed2fc66119f58cb14d58c70ae66f4561             5887 main/binary-amd64/Packages.gz
  6a30d7bcd087596a3187a441e77d96b9aea718c1            20936 main/binary-arm64/Packages
  dc0163c4d7502c00d925344bd7ef438bc0ad11fc             5904 main/binary-arm64/Packages.gz
 SHA256:
- 8dc90e37b56449dfeae9962a862874ba69881b054f35c2ceb063a297d5b5fcac              248 Release
+ db4d0627fb7b0fd8e173d1700ca72e9e943a28c7eb7eaaa15cab7da924ca1af6              248 Release
  4b288076718beedaac10876090402d4e95f002d6918eb726075f92816e98e2d4            20936 main/binary-amd64/Packages
  0e4506831fc812d6b976b0d9de8df10b494e9e83aad81b4a38a16442897d22b3             5887 main/binary-amd64/Packages.gz
  2f1b486a06ae1a693ead15875311f9233174dfb54b52c3b8768c25e84ab9571a            20936 main/binary-arm64/Packages
  316732fd9af3feed1b8ef5f79bcce337b187c2e1c5330404bd22ea14e2da1d7d             5904 main/binary-arm64/Packages.gz
 SHA512:
- a72ce17ef20a13e08996fc3e1cdf866846ed7389421ba4d2bde5580aa800319eadb66935927357a8fb9990e16ed6d76ec1d3c7f52ded3c97a1e17d679c79283b              248 Release
+ 26e25f83bd149ca1e5a898b2b49ed94aba3c024976606ce6a6a2b50df1719d279dfe6d918e8c990be73bba6f2cc3ea276755259c3ffd4a2d7b495b55177f50da              248 Release
  b76abbe89adcaff67d8e5bd22271135e627104c5a20917678298bbe2d4f10b4f2718729ac891c685a924822d5ce81dda0ca8c7e5ce0a5f6b108854c4faced834            20936 main/binary-amd64/Packages
  463addad31ff6c7724939433526c558b2173ef038bb638c379b470dfbc7ae3f2e5de3128b7bf14ce2fb2710b775eed772e599030ad13aaee995d6e32438ff65b             5887 main/binary-amd64/Packages.gz
  d70c973aa080c5b71ffe92f5a3ee761e85b071ca7762c016f97b2534af6f3e3836e01472eef6e6bddab2f0ab597c52d93a316379b02d37a8f40508533e241286            20936 main/binary-arm64/Packages
