@@ -508,3 +508,20 @@ SHA512: 68af08ae2037cbb31effdece85d9fb787f12d5e7d04b1c55bfea290757029213916c05d5
 Homepage: https://dragonflydb.io
 Description: A fast in-memory store that is fully compatible with Redis™* and Memcached.
 
+Package: dragonfly
+Architecture: amd64
+Version: 2.1
+Priority: optional
+Section: database
+Maintainer: DragonflyDB authors  <dragonfly@dragonflydb.io>
+Installed-Size: 35709
+Depends: libc6, openssl, adduser, zstd
+Filename: pool/main/dragonfly_2.1_amd64.deb
+Size: 14968252
+MD5sum: 2179543ae04b5e7c7700f0db0cd58357
+SHA1: 8d2cf6714536b3171010690bdec0a23dd29305f9
+SHA256: 55e199473016a30285aa43f9879847693a527f7213d8f894a0778bd79a0fb5d3
+SHA512: 23d23c685980d6662bcf54dc20d251e13f0bce51d977efc09d5b81bf662efe17c1572c27fba3690cc746837f649b9671559f55746f82d174c64999d2e05a83af
+Homepage: https://dragonflydb.io
+Description: A fast in-memory store that is fully compatible with Redis™* and Memcached.
+
